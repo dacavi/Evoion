@@ -139,7 +139,7 @@ app.put('/user/update/:id', (req,res)=>{
             }
             else
             {
-                if(result.affectedRows>0)
+                if(result.affectedRows=0)
                 {
                     mensaje= {
                         estado:"error",
