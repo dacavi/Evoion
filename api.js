@@ -49,8 +49,8 @@ app.post('/user/create', (req,res)=>{
             else
             {
                 mensaje= {
-                    estado:"errror",
-                    mensaje: `Usuario ${id} creado `
+                    estado:"success",
+                    mensaje: `Usuario ${id} creado`
                 }
                 res.send(mensaje)
             }
@@ -60,7 +60,27 @@ app.post('/user/create', (req,res)=>{
 
 // READ personas
 app.get('/user/read', (req,res)=>{
-    res.send('All users data');
+    let sqlread="SELECT Identificacion,Nombre FROM personas";
+    con.query(sqlread, function (err, result, fields) 
+    { 
+        if (err) 
+        {
+            mensaje= {
+                estado:"error",
+                mensaje: err.sqlMessage
+            }
+             res.send(mensaje)      
+        }
+        else
+        {
+            mensaje= {
+                estado:"success",
+                contadorusuarios:result.length,
+                usuarios: result
+            }
+            res.send(mensaje)
+        }
+    });
 })
 
 // SiNGLE READ
