@@ -85,7 +85,30 @@ app.get('/user/read', (req,res)=>{
 
 // SiNGLE READ
 app.get('/user/single_read/:id', (req,res)=>{
-    res.send(`User ${req.params.id} data`)
+    let id=req.params.id
+    let sqlsingle=`SELECT Identificacion,Nombre FROM personas WHERE Identificacion=${id}`
+    con.query(sqlsingle, function (err, result, fields) 
+    { 
+        if (err) 
+        {
+            mensaje= {
+                estado:"error",
+                mensaje: err.sqlMessage
+            }
+             res.send(mensaje)      
+        }
+        else
+        {
+            mensaje= {
+                estado:"success",
+                contadorusuarios:result.length,
+                usuarios: result
+            }
+            res.send(mensaje)
+        }
+    });
+    
+    //res.send(`User ${req.params.id} data`)
 })
 
 //UPDATE personas
