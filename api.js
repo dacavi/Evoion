@@ -22,9 +22,41 @@ app.use(express.json());
 
 //CREATE personas
 app.post('/user/create', (req,res)=>{
-    console.log(req.body);
-    res.send(req.body);
-})
+    
+    if(!req.body.identificacion || !req.body.nombre) 
+    {
+        mensaje= {
+            estado:"errror",
+            mensaje:'El campo nombre y apellido son requeridos'
+        }
+        res.send(mensaje);    
+    } 
+    else 
+    {
+        let id=req.body.identificacion;
+        let nombre=req.body.nombre;
+        let sqlinsert=`INSERT INTO personas(Identificacion, nombre) VALUES (${id},'${nombre}') `
+        con.query(sqlinsert, function (err, result, fields) 
+        {
+            if (err) 
+            {
+                mensaje= {
+                    estado:"errror",
+                    mensaje: err.sqlMessage
+                }
+                 res.send(mensaje)      
+            }
+            else
+            {
+                mensaje= {
+                    estado:"errror",
+                    mensaje: `Usuario ${id} creado `
+                }
+                res.send(mensaje)
+            }
+        });
+    }
+});
 
 // READ personas
 app.get('/user/read', (req,res)=>{
