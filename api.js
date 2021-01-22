@@ -139,7 +139,7 @@ app.put('/user/update/:id', (req,res)=>{
             }
             else
             {
-                if(result.affectedRows=0)
+                if(result.affectedRows==0)
                 {
                     mensaje= {
                         estado:"error",
@@ -161,8 +161,41 @@ app.put('/user/update/:id', (req,res)=>{
 })
 
 //DELETE personas
-app.put('/user/delete/:id', (req,res)=>{
-    res.send(`User ${nombrec} deleted`)
+app.delete('/user/delete/:id', (req,res)=>{
+
+    let id=req.params.id
+    let sqlsingle=`DELETE FROM personas WHERE Identificacion=${id}`
+    con.query(sqlsingle, function (err, result, fields) 
+    { 
+        if (err) 
+        {
+            mensaje= {
+                estado:"error",
+                mensaje: err.sqlMessage
+            }
+             res.send(mensaje)      
+        }
+        else
+        {
+            if(result.affectedRows==0)
+                {
+                    mensaje= {
+                        estado:"error",
+                        resultado:'No se encontro usuarios'
+                    }
+                    res.send(mensaje)
+                }
+                else
+                {
+                    mensaje= {
+                        estado:"success",
+                        contadorusuarios:`Usuario ${id} eliminado`
+                    }
+                    res.send(mensaje)
+                }
+        }
+    }); 
+  
 })
 
 app.listen(3000, () => {
