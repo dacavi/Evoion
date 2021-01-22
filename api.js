@@ -107,13 +107,57 @@ app.get('/user/single_read/:id', (req,res)=>{
             res.send(mensaje)
         }
     });
-    
+
     //res.send(`User ${req.params.id} data`)
 })
 
 //UPDATE personas
 app.put('/user/update/:id', (req,res)=>{
-    res.send(`User ${req.params.id} updated`)
+   
+    if(!req.body.nombre) 
+    {
+        mensaje= {
+            estado:"errror",
+            mensaje:'El campo nombre es requerids'
+        }
+        res.send(mensaje);    
+    }
+    else
+    {
+        let id=req.params.id
+        let nombre=req.body.nombre;
+        let sqlupdate=`UPDATE personas SET nombre='${nombre}' WHERE Identificacion=${id}`
+        con.query(sqlupdate, function (err, result, fields) 
+        { 
+            if (err) 
+            {
+                mensaje= {
+                    estado:"error",
+                    mensaje: err.sqlMessage
+                }
+                 res.send(mensaje)      
+            }
+            else
+            {
+                if(result.affectedRows>0)
+                {
+                    mensaje= {
+                        estado:"error",
+                        resultado:'No se encontro usuarios'
+                    }
+                    res.send(mensaje)
+                }
+                else
+                {
+                    mensaje= {
+                        estado:"success",
+                        contadorusuarios:`Usuario ${id} actualizado`
+                    }
+                    res.send(mensaje)
+                }
+            }
+        });
+    } 
 })
 
 //DELETE personas
